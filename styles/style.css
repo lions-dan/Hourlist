@@ -1,0 +1,13 @@
+
+ 
+
+
+.background {
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(300deg, #2d3436 0%, #000000 45%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
