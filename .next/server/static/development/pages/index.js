@@ -371,7 +371,7 @@ class MainFrame extends react__WEBPACK_IMPORTED_MODULE_1___default.a.Component {
   }
 
   handleLibraryImport() {
-    addUserLibrary(this.props.token, 10).then(librarySongs => {
+    addUserLibrary(this.props.token, 50).then(librarySongs => {
       const trackArray = librarySongs.items.map(function (obj) {
         return obj.track;
       });
@@ -385,7 +385,7 @@ class MainFrame extends react__WEBPACK_IMPORTED_MODULE_1___default.a.Component {
   }
 
   handleTopImport() {
-    addUserTopTracks(this.props.token, 10).then(topTracks => {
+    addUserTopTracks(this.props.token, 50).then(topTracks => {
       this.setState(prevState => ({
         imported: [...prevState.imported, ...topTracks.items]
       }));
@@ -925,10 +925,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_core_Modal__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Modal__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/TextField */ "@material-ui/core/TextField");
 /* harmony import */ var _material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _PreviewList__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./PreviewList */ "./components/PreviewList.js");
+/* harmony import */ var _material_ui_core_List__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/List */ "@material-ui/core/List");
+/* harmony import */ var _material_ui_core_List__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/core/ListItem */ "@material-ui/core/ListItem");
+/* harmony import */ var _material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @material-ui/core/ListItemText */ "@material-ui/core/ListItemText");
+/* harmony import */ var _material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _material_ui_core_ListSubheader__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/core/ListSubheader */ "@material-ui/core/ListSubheader");
+/* harmony import */ var _material_ui_core_ListSubheader__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_ListSubheader__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _material_ui_core_Backdrop__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/core/Backdrop */ "@material-ui/core/Backdrop");
+/* harmony import */ var _material_ui_core_Backdrop__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Backdrop__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _material_ui_core_Fade__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core/Fade */ "@material-ui/core/Fade");
+/* harmony import */ var _material_ui_core_Fade__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Fade__WEBPACK_IMPORTED_MODULE_12__);
 
 var _jsxFileName = "/Users/Daniel/Websites/Hourlist/components/PlaylistSelector.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement;
+
+
+
+
+
 
 
 
@@ -942,11 +958,16 @@ function getModalStyle() {
     top: `50%`,
     left: `50%`,
     transform: `translate(-50%, -50%)`,
-    overflowY: 'hidden'
+    overflowY: "hidden"
   };
 }
 
 const useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_3__["makeStyles"])(theme => ({
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
+  },
   paper: {
     position: "absolute",
     width: "60%",
@@ -955,15 +976,39 @@ const useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_3__["
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3)
+  },
+  typography: {
+    padding: theme.spacing(2)
+  },
+  root: {
+    width: "100%",
+    backgroundColor: theme.palette.background.paper,
+    position: "relative",
+    overflow: "auto",
+    color: "black",
+    height: "200px",
+    maxHeight: 200
+  },
+  listSection: {
+    backgroundColor: "inherit"
+  },
+  ul: {
+    backgroundColor: "inherit",
+    padding: 0
   }
 }));
 function PlaylistSelector(props) {
-  const classes = useStyles(); // getModalStyle is not a pure function, we roll the style only on the first render
-
+  const classes = useStyles();
   const [modalStyle] = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState(getModalStyle);
   const [open, setOpen] = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState(false);
-  const [list, updateList] = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState([]);
-  const [input, setInput] = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState(''); // '' is the initial state value
+  const [arrayOfSongs, updateList] = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState(props.importedSong);
+  const [input, setInput] = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState(""); // '' is the initial state value
+
+  const [created, setCreated] = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState(false);
+  const [feedback, setFeedback] = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState("");
+  react__WEBPACK_IMPORTED_MODULE_1___default.a.useEffect(() => {
+    updateList(prevArray => [...prevArray]);
+  }, [1]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -973,31 +1018,42 @@ function PlaylistSelector(props) {
     setOpen(false);
   };
 
-  var generateTheme = theme => {
-    console.log(props);
-    updateList(props.importedSong.sort(function (a, b) {
+  const modalClose = () => {
+    setCreated(false);
+  };
+
+  const generateTheme = theme => {
+    const sortedArray = props.importedSong.sort(function (a, b) {
       return a.feature[theme] - b.feature[theme];
-    }));
+    });
+    console.log(sortedArray);
+    updateList([...sortedArray]);
   };
 
   var createPlaylist = async function (named, list, token, user_id) {
     const apiURL = "https://api.spotify.com/v1/users/" + user_id + "/playlists";
     const data = {
-      "name": named
+      name: named
     };
     const response = await fetch(apiURL, {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
       headers: {
-        'Authorization': 'Bearer ' + token,
+        Authorization: "Bearer " + token,
         "Content-Type": "application/json"
       },
       body: _babel_runtime_corejs2_core_js_json_stringify__WEBPACK_IMPORTED_MODULE_0___default()(data)
     });
     const libraryObject = await response.json().then(playlist => {
       addSongs(list, playlist, user_id, token);
+      setCreated(true);
+      setFeedback("Created Playlist Successfully");
+    }, error => {
+      console.log(error);
+      setCreated(false);
+      setFeedback("Playlist Failed to Generate");
     });
   };
 
@@ -1005,25 +1061,23 @@ function PlaylistSelector(props) {
     const apiURL = "https://api.spotify.com/v1/users/" + user_id + "/playlists/" + playlist.id + "/tracks";
     let result = list.map(a => a.uri);
     const response = await fetch(apiURL, {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
       headers: {
-        'Authorization': 'Bearer ' + token,
+        Authorization: "Bearer " + token,
         "Content-Type": "application/json"
       },
       body: _babel_runtime_corejs2_core_js_json_stringify__WEBPACK_IMPORTED_MODULE_0___default()(result)
     });
-    const libraryObject = await response.json().then(value => {
-      console.log(value);
-    });
+    const libraryObject = await response.json().then(value => {});
   };
 
   return __jsx("div", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 92
+      lineNumber: 139
     },
     __self: this
   }, __jsx(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_4___default.a, {
@@ -1033,7 +1087,7 @@ function PlaylistSelector(props) {
     onClick: handleOpen,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 93
+      lineNumber: 140
     },
     __self: this
   }, "Choose Playlist Theme"), __jsx(_material_ui_core_Modal__WEBPACK_IMPORTED_MODULE_5___default.a, {
@@ -1043,7 +1097,7 @@ function PlaylistSelector(props) {
     onClose: handleClose,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 96
+      lineNumber: 148
     },
     __self: this
   }, __jsx("div", {
@@ -1051,7 +1105,7 @@ function PlaylistSelector(props) {
     className: classes.paper,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 102
+      lineNumber: 154
     },
     __self: this
   }, __jsx(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2___default.a, {
@@ -1062,7 +1116,7 @@ function PlaylistSelector(props) {
     spacing: 3,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 103
+      lineNumber: 155
     },
     __self: this
   }, __jsx(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2___default.a, {
@@ -1070,7 +1124,7 @@ function PlaylistSelector(props) {
     xs: 12,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 110
+      lineNumber: 162
     },
     __self: this
   }, __jsx(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_6___default.a, {
@@ -1079,14 +1133,14 @@ function PlaylistSelector(props) {
     label: "Playlist Name",
     margin: "normal",
     style: {
-      width: '100%'
+      width: "100%"
     },
     variant: "outlined",
     value: input,
     onChange: e => setInput(e.target.value),
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 111
+      lineNumber: 163
     },
     __self: this
   })), __jsx(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2___default.a, {
@@ -1094,7 +1148,7 @@ function PlaylistSelector(props) {
     xs: 6,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 122
+      lineNumber: 174
     },
     __self: this
   }, __jsx(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_4___default.a, {
@@ -1102,10 +1156,12 @@ function PlaylistSelector(props) {
     color: "primary",
     justify: "center",
     className: classes.button,
-    onClick: () => generateTheme("danceability"),
+    onClick: () => {
+      generateTheme("danceability");
+    },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 123
+      lineNumber: 175
     },
     __self: this
   }, "The Dance Build Up")), __jsx(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2___default.a, {
@@ -1113,17 +1169,19 @@ function PlaylistSelector(props) {
     xs: 6,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 133
+      lineNumber: 187
     },
     __self: this
   }, __jsx(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_4___default.a, {
     variant: "contained",
     color: "secondary",
     className: classes.button,
-    onClick: () => generateTheme("energy"),
+    onClick: () => {
+      generateTheme("energy");
+    },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 134
+      lineNumber: 188
     },
     __self: this
   }, "The Energy Build Up")), __jsx(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2___default.a, {
@@ -1131,17 +1189,19 @@ function PlaylistSelector(props) {
     xs: 6,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 143
+      lineNumber: 199
     },
     __self: this
   }, __jsx(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_4___default.a, {
     variant: "contained",
     color: "default",
     className: classes.button,
-    onClick: () => generateTheme("tempo"),
+    onClick: () => {
+      generateTheme("tempo");
+    },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 144
+      lineNumber: 200
     },
     __self: this
   }, "The Tempo Build Up")), __jsx(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2___default.a, {
@@ -1149,17 +1209,19 @@ function PlaylistSelector(props) {
     xs: 6,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 153
+      lineNumber: 211
     },
     __self: this
   }, __jsx(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_4___default.a, {
     variant: "contained",
     color: "primary",
     className: classes.button,
-    onClick: () => generateTheme("loudness"),
+    onClick: () => {
+      generateTheme("loudness");
+    },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 154
+      lineNumber: 212
     },
     __self: this
   }, "The Build Up")), __jsx(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2___default.a, {
@@ -1167,143 +1229,126 @@ function PlaylistSelector(props) {
     xs: 12,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 163
+      lineNumber: 223
     },
     __self: this
-  }, __jsx(_PreviewList__WEBPACK_IMPORTED_MODULE_7__["default"], {
-    sortedList: list,
-    sectionId: "List Preview",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 164
-    },
-    __self: this
-  })), __jsx(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2___default.a, {
-    item: true,
-    xs: 6,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 166
-    },
-    __self: this
-  }, __jsx(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_4___default.a, {
-    variant: "contained",
-    color: "primary",
-    className: classes.button,
-    onClick: () => createPlaylist(input, list, props.token, props.user_id),
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 167
-    },
-    __self: this
-  }, "Create Playlist"))))));
-}
-
-/***/ }),
-
-/***/ "./components/PreviewList.js":
-/*!***********************************!*\
-  !*** ./components/PreviewList.js ***!
-  \***********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PreviewList; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/styles */ "@material-ui/core/styles");
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _material_ui_core_List__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/List */ "@material-ui/core/List");
-/* harmony import */ var _material_ui_core_List__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/ListItem */ "@material-ui/core/ListItem");
-/* harmony import */ var _material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/ListItemText */ "@material-ui/core/ListItemText");
-/* harmony import */ var _material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _material_ui_core_ListSubheader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/ListSubheader */ "@material-ui/core/ListSubheader");
-/* harmony import */ var _material_ui_core_ListSubheader__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_ListSubheader__WEBPACK_IMPORTED_MODULE_5__);
-var _jsxFileName = "/Users/Daniel/Websites/Hourlist/components/PreviewList.js";
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
-
-
-
-
-
-
-const useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["makeStyles"])(theme => ({
-  root: {
-    width: '100%',
-    backgroundColor: theme.palette.background.paper,
-    position: 'relative',
-    overflow: 'auto',
-    color: 'black',
-    height: '200px',
-    maxHeight: 200
-  },
-  listSection: {
-    backgroundColor: 'inherit'
-  },
-  ul: {
-    backgroundColor: 'inherit',
-    padding: 0
-  }
-}));
-function PreviewList(props) {
-  const classes = useStyles();
-  return __jsx(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_2___default.a, {
+  }, __jsx(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_7___default.a, {
     className: classes.root,
     subheader: __jsx("li", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 31
+        lineNumber: 224
       },
       __self: this
     }),
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 31
+      lineNumber: 224
     },
     __self: this
   }, __jsx("li", {
-    key: `${props.sectionId}`,
+    key: `Section Updated`,
     className: classes.listSection,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 32
+      lineNumber: 225
     },
     __self: this
   }, __jsx("ul", {
     className: classes.ul,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 33
+      lineNumber: 226
     },
     __self: this
-  }, __jsx(_material_ui_core_ListSubheader__WEBPACK_IMPORTED_MODULE_5___default.a, {
+  }, __jsx(_material_ui_core_ListSubheader__WEBPACK_IMPORTED_MODULE_10___default.a, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 34
+      lineNumber: 227
     },
     __self: this
-  }, `Build Up Generated Playlist`), props.sortedList.map((item, index) => __jsx(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_3___default.a, {
+  }, `Build Up Generated Playlist`), arrayOfSongs.map((item, index) => __jsx(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_8___default.a, {
     style: {
-      color: 'black'
+      color: "black"
     },
     key: item.id + index,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36
+      lineNumber: 229
     },
     __self: this
-  }, __jsx(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_4___default.a, {
+  }, __jsx(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_9___default.a, {
     primary: `${item.name} by ${item.artists[0].name}`,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 37
+      lineNumber: 233
     },
     __self: this
-  }))))));
+  }))))))), __jsx(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2___default.a, {
+    item: true,
+    xs: 6,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 242
+    },
+    __self: this
+  }, __jsx(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_4___default.a, {
+    variant: "contained",
+    color: "primary",
+    className: classes.button,
+    onClick: () => {
+      createPlaylist(input, arrayOfSongs, props.token, props.user_id);
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 243
+    },
+    __self: this
+  }, "Create Playlist"), __jsx(_material_ui_core_Modal__WEBPACK_IMPORTED_MODULE_5___default.a, {
+    "aria-labelledby": "transition-modal-title",
+    "aria-describedby": "transition-modal-description",
+    className: classes.modal,
+    open: created,
+    onClose: modalClose,
+    closeAfterTransition: true,
+    BackdropComponent: _material_ui_core_Backdrop__WEBPACK_IMPORTED_MODULE_11___default.a,
+    BackdropProps: {
+      timeout: 500
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 258
+    },
+    __self: this
+  }, __jsx(_material_ui_core_Fade__WEBPACK_IMPORTED_MODULE_12___default.a, {
+    in: created,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 270
+    },
+    __self: this
+  }, __jsx("div", {
+    className: classes.paper,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 271
+    },
+    __self: this
+  }, __jsx("h2", {
+    id: "transition-modal-title",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 272
+    },
+    __self: this
+  }, "Transition modal"), __jsx("p", {
+    id: "transition-modal-description",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 273
+    },
+    __self: this
+  }, feedback)))))))));
 }
 
 /***/ }),
@@ -2316,6 +2361,17 @@ module.exports = __webpack_require__(/*! /Users/Daniel/Websites/Hourlist/pages/i
 
 /***/ }),
 
+/***/ "@material-ui/core/Backdrop":
+/*!*********************************************!*\
+  !*** external "@material-ui/core/Backdrop" ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("@material-ui/core/Backdrop");
+
+/***/ }),
+
 /***/ "@material-ui/core/Button":
 /*!*******************************************!*\
   !*** external "@material-ui/core/Button" ***!
@@ -2335,6 +2391,17 @@ module.exports = require("@material-ui/core/Button");
 /***/ (function(module, exports) {
 
 module.exports = require("@material-ui/core/Container");
+
+/***/ }),
+
+/***/ "@material-ui/core/Fade":
+/*!*****************************************!*\
+  !*** external "@material-ui/core/Fade" ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("@material-ui/core/Fade");
 
 /***/ }),
 

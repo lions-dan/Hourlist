@@ -106,7 +106,7 @@ class MainFrame extends React.Component {
     }
     
     handleLibraryImport(){
-      addUserLibrary(this.props.token,10).then((librarySongs)=>{
+      addUserLibrary(this.props.token,50).then((librarySongs)=>{
           const trackArray = librarySongs.items.map(function (obj) {
             return obj.track;
           });
@@ -118,7 +118,7 @@ class MainFrame extends React.Component {
       }
 
     handleTopImport(){
-     addUserTopTracks(this.props.token,10).then((topTracks)=>{
+     addUserTopTracks(this.props.token,50).then((topTracks)=>{
         this.setState(prevState => ({
           imported: [...prevState.imported,...topTracks.items]
         }))

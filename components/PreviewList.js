@@ -26,10 +26,12 @@ const useStyles = makeStyles(theme => ({
 
 export default function PreviewList(props) {
   const classes = useStyles();
+  const [list, setList] = React.useState([])
+
 
   return (
     <List className={classes.root} subheader={<li />}>
-        <li key={`${props.sectionId}`} className={classes.listSection}>
+        <li key={`Section Updated`} className={classes.listSection}>
           <ul className={classes.ul}>
             <ListSubheader>{`Build Up Generated Playlist`}</ListSubheader>
             {props.sortedList.map((item,index) => (
